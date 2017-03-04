@@ -1,4 +1,4 @@
-pub struct Pitch {
+pub enum Pitch {
     MIDI(f32),  // MIDI format--semitones in 12-TET, 60 is middle C
     Freq(f32),  // Actual frequency in Hz
 }
@@ -15,7 +15,7 @@ impl Pitch { //Defines methods on Pitch
     fn to_freq(&self) -> Pitch {
         match *self {
             Pitch::MIDI(x) =>
-                Pitch::Freq(440.0 * (2.0).powf((x - 69.0) / 12.0)),
+                Pitch::Freq(440.0 * (2.0f32).powf((x - 69.0) / 12.0)),
             Pitch::Freq(x) => Pitch::Freq(x),
         }
     }
@@ -32,10 +32,10 @@ pub struct Event {
 
 impl Event {
     fn new(pitch: Pitch, ampl: f32, time: f32, dur: f32) -> Event {
-        Event::new(pitch, ampl, time, dur, -1, 0.0)
+        Event::new_bar(pitch, ampl, time, dur, -1, 0.0)
     }
 
-    fn new(pitch: Pitch, ampl: f32, time: f32, dur: f32, bar: i32, beat: f32) -> Event {
+    fn new_bar(pitch: Pitch, ampl: f32, time: f32, dur: f32, bar: i32, beat: f32) -> Event {
         Event {
             pitch: pitch,
             ampl: ampl,
