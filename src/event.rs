@@ -3,7 +3,7 @@ pub struct Pitch {
     Freq(f32),  // Actual frequency in Hz
 }
 
-impl Pitch {
+impl Pitch { //Defines methods on Pitch
     fn to_midi(&self) -> Pitch {
         match *self {
             Pitch::MIDI(x) => Pitch::MIDI(x),
