@@ -1,4 +1,5 @@
 pub mod event;
+pub mod eventsource;
 
 #[cfg(test)]
 mod tests {
