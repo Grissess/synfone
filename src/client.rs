@@ -1,4 +1,6 @@
 use std::net;
+use portaudio as pa;
+use synth::Synth;
 
 fn main(){
 	let args = std::env::args();
@@ -30,6 +32,31 @@ fn main(){
 			dur += fromPacket(4,8,&buf,10) * 1000000;
 			dur += fromPacket(8,12,&buf,10);
 			dur *= 1000;// puts into nanp seconds
+			let mut freq = fromPacket(); //FILL IN LATER!!!!
+			let mut amp = fromPacket();//FILL IN LATER!!!
+			let mut vel = fromPacket(); //FIL IN LATER
+			let mut synth = {
+				use synth::{Point,Oscillator,oscillator,Envelope};
+				let amp_env = Envelope::from(vec!(
+					Point::new(0.0,amp,0.0);
+				));
+				let freq_env = Envelope::from(vec!(
+					Point::new(0.0,freq,0.0)
+				));
+				let oscillator = Oscillator::new(oscillator::waveform::Square, amp_env,freq_env,());
+				Synth::retrigger(())
+				.oscillator(oscillator)
+				.duration(dur)
+				.base_pitch(freq)
+				.loop_points(0.0,0.0)
+				.fade(50.0,50.0)
+				.num_voices(1)
+				.volume(1.0)
+				.detune(.5)
+				.spread(1.0)
+			};
+			synth.note_on(freq,vel);
+			
 		} else if fByte == 1{
             println!("mirroring packet to {}",src_addr);
             socket.send_to(&buf,&src_addr);
