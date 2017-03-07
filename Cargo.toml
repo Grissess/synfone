@@ -6,4 +6,5 @@ authors = ["Graham Northup <grissess@nexusg.org>"]
 [dependencies]
 xml-rs = "0.4"
 rimd = {git = "https://github.com/nicklan/rimd.git"}
+synth = {git = "https://github.com/RustAudio/synth.git"}
 portaudio = {git = "https://github.com/RustAudio/rust-portaudio"}

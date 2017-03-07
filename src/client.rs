@@ -21,14 +21,14 @@ fn main(){
 		}
         println!(" ");
         let mut fByte = 0;
-        fByte = buf[3];  //fromBinary(0,4,&buf);
+        fByte = fromPacket(0,4,&buf,10);  //fromBinary(0,4,&buf);
         println!(" first byte {}",fByte);
 		if fByte == 2{break;
 		} else if fByte == 3 {
 			//play note here
 			let mut dur = 0;
-			dur += fromBinary(4,8,&buf) * 1000000;
-			dur += fromBinary(4,8,&buf);
+			dur += fromPacket(4,8,&buf,10) * 1000000;
+			dur += fromPacket(8,12,&buf,10);
 			dur *= 1000;// puts into nanp seconds
 		} else if fByte == 1{
             println!("mirroring packet to {}",src_addr);
@@ -47,20 +47,18 @@ fn main(){
 
 }
 
-fn fromBinary(i: usize,j: usize,buf: &[u8])->u32 { 
+fn fromPacket(i: usize,j: usize,buf: &[u8],base: u32)->u32 { 
         let mut z: u32 = 1;
         let mut ret: u32 = 0;
         for q in i..j{
-            z *= 2;
+            z *= base;
         }
-        z /= 2;
+        z /= base;
         println!("Z {}", z);
         for q in i..j{
             print!("{}",buf[q]);
-            if buf[q] == 1{
-                ret+=z;
-            }
-            z/=2;
+            ret += z * (buf[q] as u32);
+            z/=base;
         }
         ret
 }
@@ -75,3 +73,4 @@ fn mkCapsPacket(ports: u8,id: u8) ->[u8;36] {
     ret[11] = 69;
     ret
 }
+
